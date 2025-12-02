@@ -1,13 +1,2 @@
-
-id:1 name:coiso Status:In Progress Created:null
-id:2 name:transar Status:In Progress Created:null
-id:3 name:Sair-Na-mao Status:Done Created:null
-id:4 name:transar Status:Done Created:null
-id:5 name:transar Status:Done Created:null
-id:6 name:transar Status:In Progress Created:null
-id:7 name:transar Status:Not Started Created:null
-id:8 name:transar Status:In Progress Created:null
-id:9 name:transar Status:In Progress Created:null
-id:10 name:coiso Status:In Progress Created:null    
-id:11 name:coiso Status:Not Started Created:null Created:null
-id:12 name:marida Status:Not Started Created:2025-12-01T20:40:24.125646700 Updated:2025-12-01T20:40:28.518286800
+id:2 name:cook Status:Done Created:2025-12-01T21:20:59.337452400 Updated:null
+id:3 name:drive Status:Not Started Created:2025-12-01T21:22:09.982799300 Updated:null

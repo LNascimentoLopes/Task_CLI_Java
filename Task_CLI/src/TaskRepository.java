@@ -55,20 +55,19 @@ public class TaskRepository {
 
         List<String> linhas = new ArrayList<>();
 
-        // 1. ler todas as linhas
+        //ler todas as linhas
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String linha;
 
             while ((linha = reader.readLine()) != null) {
 
-                // 2. Se a linha NÃO contém o id desejado → guarda ela
+                //Se a linha nao contém o id desejado
                 if (!linha.startsWith("id:" + id)) {
                     linhas.add(linha);
                 }
             }
         }
 
-        // 3. reescrever o arquivo só com as linhas que sobraram
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (String l : linhas) {
                 writer.write(l);
@@ -145,7 +144,7 @@ public class TaskRepository {
 
             while ((linha = reader.readLine()) != null) {
 
-                // 2. Se a linha NÃO contém o id desejado → guarda ela
+                // 2. Se a linha nao contém o id necessario
                 if (!linha.startsWith("id:" + id)) {
                     linhas.add(linha);
                 } else {
@@ -156,7 +155,7 @@ public class TaskRepository {
             }
         }
 
-        // 3. reescrever o arquivo só com as linhas que sobraram
+        //reescrever o arquivo só com as linhas que sobraram
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (String l : linhas) {
                 writer.write(l);
@@ -172,13 +171,13 @@ public class TaskRepository {
 
         List<String> linhas = new ArrayList<>();
 
-        // 1. ler todas as linhas
+        // ler todas as linhas
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String linha;
 
             while ((linha = reader.readLine()) != null) {
 
-                // 2. Se a linha NÃO contém o id desejado → guarda ela
+                // Se a linha nao o id desejado, guarda a linha
                 if (!linha.startsWith("id:" + id)) {
                     linhas.add(linha);
                 } else {
@@ -189,7 +188,7 @@ public class TaskRepository {
             }
         }
 
-        // 3. reescrever o arquivo só com as linhas que sobraram
+        // reescrever o arquivo só com linhas que sobraram
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (String l : linhas) {
                 writer.write(l);
@@ -206,44 +205,39 @@ public class TaskRepository {
 
         int posStatus = linha.indexOf("Status:");
 
-        if (posStatus == -1) return linha; // não encontrou status (não altera nada)
+        if (posStatus == -1) return linha; // não encontrou status
 
         String antes = linha.substring(0, posStatus);
 
-        // Descobre onde termina o status atual (antes de Created)
+        // onde termina o status atual
         int posCreated = linha.indexOf("Created:");
 
-        // Parte depois de Created:
+        //depois de Created:
         String depois = linha.substring(posCreated);
 
         return antes + "Status:" + novoStatus + " " + depois;
     }
 
-    public void Update (int id, String newname, String Time) throws IOException {
+    public void Update(int id, String newname, String newTime) throws IOException {
         File file = new File("tasks.json");
-
         List<String> linhas = new ArrayList<>();
 
-        // 1. ler todas as linhas
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String linha;
 
             while ((linha = reader.readLine()) != null) {
 
-                // 2. Se a linha NÃO contém o id desejado → guarda ela
-                if (!linha.startsWith("id:" + id)) {
-                    linhas.add(linha);
-                } else {
-                    atualizarLinha(linha, newname);
-                    String novaLinha;
-                    novaLinha = atualizarTempo(linha, Time);
-                    linhas.add(novaLinha);
+                if (linha.replace(" ", "").startsWith("id:" + id)) {
 
+                    String nova = atualizarLinha(linha, newname, newTime);
+                    linhas.add(nova);
+
+                } else {
+                    linhas.add(linha);
                 }
             }
         }
 
-        // 3. reescrever o arquivo só com as linhas que sobraram
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (String l : linhas) {
                 writer.write(l);
@@ -253,36 +247,15 @@ public class TaskRepository {
 
         System.out.println("Task " + id + " updated successfully");
     }
-    private String atualizarLinha(String linha, String novoNome) {
 
+    private String atualizarLinha(String linha, String newName, String newTime) {
+        // Atualizar name
+        linha = linha.replaceAll("name:[^ ]+", "name:" + newName);
 
-        int posName = linha.indexOf("name:");
+        // Atualizar Updated
+        linha = linha.replaceAll("Updated:[^ ]+", "Updated:" + newTime);
 
-        if (posName == -1) return linha; // não encontrou nome (não altera nada)
-
-        String antes = linha.substring(0, posName);
-
-        // Descobre onde termina o nome atual (antes de Status)
-        int posStatus = linha.indexOf("Status:");
-
-        // Parte depois de Status:
-        String depois = linha.substring(posStatus);
-
-        return antes + "name:" + novoNome + " " + depois;
-    }
-    private String atualizarTempo(String linha, String novoTempo) {
-
-
-        int posTime = linha.indexOf("Updated:");
-
-        if (posTime == -1) return linha; // não encontrou tempo (não altera nada)
-
-        String antes = linha.substring(0, posTime);
-
-        // Descobre onde termina o nome atual (antes de Status)
-        int posCreated = linha.indexOf("Created:");
-
-        return antes + "Updated:" + novoTempo;
+        return linha;
     }
 }
 
